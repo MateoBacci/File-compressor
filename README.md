@@ -1,4 +1,4 @@
-#Compresor de archivos
+# Compresor de archivos
 
 TP: Estructuras de datos y Algoritmos 1.
 
