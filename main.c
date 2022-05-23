@@ -83,5 +83,7 @@ int main(){
 
   BTree arbol = malloc(sizeof(Nodo));
   arbol = armar_arbol(duplas);
+  
+  puts("Hola");
   return 0;
 }
