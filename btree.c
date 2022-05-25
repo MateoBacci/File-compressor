@@ -42,22 +42,32 @@ BTree btree_unir(BTree left, BTree right) {
 /**
  * Recorrido del arbol, utilizando la funcion pasada.
  */
-void btree_recorrer(BTree arbol, BTreeOrdenDeRecorrido orden, FuncionVisitante visit) {
+void btree_recorrer(BTree arbol, 
+                    BTreeOrdenDeRecorrido orden,
+                    FuncionVisitante visit) {
+  
   if (btree_empty(arbol)) return;
 
-  if (orden == BTREE_RECORRIDO_PRE)
-    visit(arbol->caracter);       /* Si es preorder: se muestra primero la raiz */
-
+  
+  if (orden == BTREE_RECORRIDO_PRE){
+    if (btree_empty(arbol->left) && arbol->peso)
+      visit(arbol->caracter);
+  }
+  printf("0");
   btree_recorrer(arbol->left, orden, visit);
 
-  if (orden == BTREE_RECORRIDO_IN)
-    visit(arbol->caracter);     /* Si es inorder: la raiz se muestra segunda */
-
+  if (orden == BTREE_RECORRIDO_IN){
+    if (btree_empty(arbol->left) && arbol->peso)
+      visit(arbol->caracter);
+  }
+  printf("1");
   btree_recorrer(arbol->right, orden, visit);
 
-  if (orden == BTREE_RECORRIDO_POST)
-    visit(arbol->caracter);     /* Si es postorder: orden = 2, se muestra la raiz */
-
+  if (orden == BTREE_RECORRIDO_POST){
+    if (btree_empty(arbol->left) && arbol->peso)
+      visit(arbol->caracter);
+  }
+  puts("");
   return;
 }
 
@@ -80,6 +90,15 @@ int btree_buscar(BTree arbol, char caracter){
       || btree_buscar(arbol->right, caracter);
 }
 
+
+BTree btree_copiar(BTree arbol){
+  BTree nuevoArbol = malloc(sizeof(Nodo));
+  nuevoArbol->caracter = arbol->caracter;
+  nuevoArbol->left = arbol->left;
+  nuevoArbol->right = nuevoArbol->right;
+  nuevoArbol->peso = arbol->peso;
+  return nuevoArbol;
+}
 
 
 int btree_altura(BTree arbol){
