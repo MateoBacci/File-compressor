@@ -89,9 +89,14 @@ int main(){
   
   BTree arbol = malloc(sizeof(Nodo));
   arbol = armar_arbol(duplas);
-  btree_recorrer(arbol, BTREE_RECORRIDO_PRE, imprimir_caracter);
+  //btree_recorrer(arbol, BTREE_RECORRIDO_PRE, imprimir_caracter);
   puts("\n");
 
 
+  char *caracteres, *codigos, *codificacionArbol;
+  caracteres = malloc(sizeof(char)*2);
+  codigos = malloc(sizeof(char)*2);
+
+  btree_codificacion(arbol, codigos);
   return 0;
 }
