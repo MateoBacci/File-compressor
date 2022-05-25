@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 
@@ -71,7 +72,42 @@ void btree_recorrer(BTree arbol,
   return;
 }
 
-/* Ejercicio: */
+/*
+int btree_codificacion(BTree arbol, char* codificacion) {
+
+  int i=0;
+
+  if (btree_empty(arbol)) return i;
+  
+  int caracterAgregado = 0;
+  
+  if (btree_empty(arbol->left) && arbol->peso){
+    printf("'%c'\n", arbol->caracter);
+    caracterAgregado = 1;
+  }
+
+  
+  if (!caracterAgregado && arbol->peso) {
+    printf("0 ");
+    codificacion = realloc(codificacion, i+2);
+    codificacion[i] = '0';
+  }
+
+  i += btree_codificacion(arbol->left, codificacion);
+
+  if (!caracterAgregado && arbol->peso) {
+    printf("1 ");
+    codificacion = realloc(codificacion, i+1);
+    codificacion[i] = '1';
+  }
+  i += btree_codificacion(arbol->right, codificacion);
+
+  return i;
+}
+
+*/
+
+
 int btree_nnodos(BTree arbol){
   if (btree_empty(arbol))
     return 0;
