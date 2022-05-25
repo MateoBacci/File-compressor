@@ -72,7 +72,7 @@ void btree_recorrer(BTree arbol,
   return;
 }
 
-/*
+
 int btree_codificacion(BTree arbol, char* codificacion) {
 
   int i=0;
@@ -105,7 +105,7 @@ int btree_codificacion(BTree arbol, char* codificacion) {
   return i;
 }
 
-*/
+
 
 
 int btree_nnodos(BTree arbol){
