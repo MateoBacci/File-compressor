@@ -9,7 +9,9 @@
 #define ARCHIVO "prueba.txt"
 
 
-
+/* Crea e inicializa 256 hojas (árboles con peso 0 y sin hijos), asignandole
+ * un caracter de la table ASCII a cada uno.
+ */
 BTree* crear_duplas(){
   BTree* nodos = malloc(sizeof(BTree) * 256);
   for (int i = 0; i < 256; i++) {
@@ -22,10 +24,9 @@ BTree* crear_duplas(){
   return nodos;
 }
 
-void contar_caracteres(BTree* duplas, char* buf, int len){
+void contar_caracteres(BTree* duplas, char* buf, size_t len){
   for (int i = 0; i < len; i++) {
-    int posicion = (unsigned)buf[i];
-    duplas[posicion]->peso++;
+    duplas[(unsigned char)buf[i]]->peso++;
   }
 }
 
@@ -67,23 +68,30 @@ BTree armar_arbol(BTree* duplas){
     }
     duplas[i+1] = btree_unir(duplas[i], duplas[i+1]);
   }
-  printf("%d", duplas[i]->peso);
-  return *duplas;
+  return duplas[i];
 }
 
-
+/* Función copiada de P4E3, es para recorrer el arbol y mostrarlo */
+static void imprimir_caracter(char data) {
+  printf(": '%c'\n", data);
+}
 
 int main(){
   BTree* duplas;
   char test[] = "hol aisndiofn oqwapmdosada jpoij¿roirew0 i4'¿523¿'423++* ";
   duplas = crear_duplas();
   contar_caracteres(duplas, test, strlen(test));
-  ordena_duplas(duplas, 0);
-  mostrar_duplas(duplas);
 
+  //mostrar_duplas(duplas);
+  ordena_duplas(duplas, 0);
+  //puts("Duplas ordenadas");
+  //mostrar_duplas(duplas);
+  
   BTree arbol = malloc(sizeof(Nodo));
   arbol = armar_arbol(duplas);
-  
-  puts("Hola");
+  btree_recorrer(arbol, BTREE_RECORRIDO_PRE, imprimir_caracter);
+  puts("\n");
+
+
   return 0;
 }
