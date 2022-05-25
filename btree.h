@@ -1,7 +1,7 @@
 #ifndef __BTREE_H__
 #define __BTREE_H__
 
-typedef void (*FuncionVisitante)(int dato);
+typedef void (*FuncionVisitante)(char dato);
 
 typedef enum {
   BTREE_RECORRIDO_IN,
