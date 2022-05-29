@@ -45,6 +45,8 @@ BTree btree_unir(BTree left, BTree right);
 void btree_recorrer(BTree arbol, BTreeOrdenDeRecorrido orden,
                     FuncionVisitante visit);
 
+int btree_codificacion(BTree arbol, char* code, int i);
+
 
 int btree_nnodos(BTree arbol);
 
