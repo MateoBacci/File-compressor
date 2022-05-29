@@ -6,7 +6,6 @@
 #include "io.h"
 #include "btree.h"
 //#include "funciones.h"
-#define ARCHIVO "prueba.txt"
 
 
 /* Crea e inicializa 256 hojas (árboles con peso 0 y sin hijos), asignandole
@@ -25,8 +24,10 @@ BTree* crear_duplas(){
 }
 
 void contar_caracteres(BTree* duplas, char* buf, size_t len){
+  int pos, cont = 0;
   for (int i = 0; i < len; i++) {
-    duplas[(unsigned char)buf[i]]->peso++;
+    pos = (unsigned char)buf[i];
+    duplas[pos]->peso++;
   }
 }
 
@@ -45,7 +46,7 @@ void mostrar_duplas(BTree* duplas){
   }
 }
 
-void ordena_duplas(BTree* duplas, int inicio){ /* Inserción */
+void ordena_duplas(BTree* duplas, int inicio){ /* Selección */
   int min, minPos;
   BTree aux;
   for (int i = inicio; i < 255; i++) {
@@ -60,16 +61,61 @@ void ordena_duplas(BTree* duplas, int inicio){ /* Inserción */
   }
 }
 
-BTree armar_arbol(BTree* duplas){ 
+
+BTree btree_armar(BTree* duplas){ 
   int i = 0;
   for (; i < 255; i++){
-    if (duplas[i]->peso > duplas[i+1]->peso){
+    if (duplas[i]->peso > duplas[i+1]->peso)
       ordena_duplas(duplas, i);
-    }
     duplas[i+1] = btree_unir(duplas[i], duplas[i+1]);
   }
   return duplas[i];
 }
+
+void duplas_destruir(BTree* duplas){
+  btree_destruir(*duplas);
+  free(duplas);
+}
+
+/*
+* chars[i] = codificacion en el arbol del caracter en la posicion i de la 
+* tabla ascii
+*
+* - Ej: 
+*     Codificacion de 'A' en el arbol: 00011
+*     chars[65] = "00011"
+*/
+
+
+/*
+char* char_codificacion(char* codeTree, char* codeChars){
+  char* newCodesChar[256];
+  char* strAux = malloc(sizeof(1));
+  int j = 0; // j = 0, ..., 255
+  int len = 0;
+  for (int i = 0; i < 511; i++){
+    if (codeTree[i] == '0'){
+      len++;
+      strAux = realloc(strAux, len);
+      strAux[i] = '0';
+    }
+    else {
+      int pos = (unsigned char)codeChars[j];
+      newCodesChar[pos] = malloc(len);
+      newCodesChar[pos] = strAux;
+      if (strAux[len-1]) {
+        len--;
+        strAux = realloc(strAux, len)
+      }
+      strAux[len-1] = '1';
+      j++;
+    }
+    printf("%s - %d\n", strAux, len);
+  }
+}
+
+*/
+
 
 /* Función copiada de P4E3, es para recorrer el arbol y mostrarlo */
 static void imprimir_caracter(char data) {
@@ -78,25 +124,35 @@ static void imprimir_caracter(char data) {
 
 int main(){
   BTree* duplas;
-  char test[] = "hol aisndiofn oqwapmdosada jpoij¿roirew0 i4'¿523¿'423++* ";
+  char *path = malloc(50), *buf;
+  int len, cantCaracteres;
+
+  /* Armamos el arreglo de arboles ("duplas"), que serán las hojas en el arbol
+   * final. "Armar" el arreglo consiste en reservar el estado en memoria de 256
+   * arboles (BTree), inicializar el peso de todos a 0 y sus hijos a NULL, luego
+   * recorrer el buf y contar cuántas veces aparece cada caracter. Finalmente, 
+   * ordenar de menor a mayor las 256 hojas según su peso.   
+   */
+
+  buf = readfile("prueba.txt", &len);
   duplas = crear_duplas();
-  contar_caracteres(duplas, test, strlen(test));
-
-  //mostrar_duplas(duplas);
+  contar_caracteres(duplas, buf, len);
   ordena_duplas(duplas, 0);
-  //puts("Duplas ordenadas");
-  //mostrar_duplas(duplas);
-  
-  BTree arbol = malloc(sizeof(Nodo));
-  arbol = armar_arbol(duplas);
-  //btree_recorrer(arbol, BTREE_RECORRIDO_PRE, imprimir_caracter);
-  puts("\n");
 
+  BTree arbol;
+  arbol = btree_armar(duplas);
+  char *codeArbol = malloc(768);
+  char *caracteres = malloc(256);
+  btree_codificacion(arbol, codeArbol, 0);
+  printf("%s\n", codeArbol); 
+/*
+  char *codeFinal = malloc(768); // 768 = 512 + 256 = codeArbol + caracteres
 
-  char *caracteres, *codigos, *codificacionArbol;
-  caracteres = malloc(sizeof(char)*2);
-  codigos = malloc(sizeof(char)*2);
+  codeFinal = strcat(codeArbol, caracteres);
+  writefile("f.txt.btree", codeFinal, cantCaracteres + 512);
+*/
+  //char_codificacion(arbol, caracteres);
+  duplas_destruir(duplas);
 
-  btree_codificacion(arbol, codigos);
   return 0;
 }
