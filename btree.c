@@ -72,42 +72,48 @@ void btree_recorrer(BTree arbol,
   return;
 }
 
+/*
+* btree_codificacion: BTree char* char* int -> int
+*
+* Recorre el arbol para ir guardando en codificacion la codificación del mismo,
+* y en caracteres, la codificación de cada caracter en un arreglo. Contador
+* sirve para mantener un control de en qué nodo va y así saber en qué índice de
+* codificación guardar cada bit.
+* Codificacion[0 - 510] -> codificacion del arbol
+* Codificacion[511 - 766] -> caracteres en el orden en que aparecen en el arbol
+*/
 
-int btree_codificacion(BTree arbol, char* codificacion) {
 
-  int i=0;
-
-  if (btree_empty(arbol)) return i;
+int btree_codificacion (BTree arbol, char* codificacion, int contador) {
   
-  int caracterAgregado = 0;
+  if (btree_empty(arbol))
+    return contador-1; /* Si es NULL no se debe contar */
   
-  if (btree_empty(arbol->left) && arbol->peso){
-    printf("'%c'\n", arbol->caracter);
-    caracterAgregado = 1;
+  if (btree_empty(arbol->left)) {  /* Si es una hoja */
+    codificacion[contador] = '1';
+    codificacion[contador+511] = arbol->caracter;
+    printf("1: '%c' - %d - %d\n", arbol->caracter, arbol->peso, arbol->caracter);
   }
-
+  else {
+    codificacion[contador] = '0';
+    printf("0");
+  }
   
-  if (!caracterAgregado && arbol->peso) {
-    printf("0 ");
-    codificacion = realloc(codificacion, i+2);
-    codificacion[i] = '0';
-  }
+  contador = btree_codificacion(arbol->left, codificacion, contador + 1);
+  contador = btree_codificacion(arbol->right, codificacion, contador + 1 ); 
 
-  i += btree_codificacion(arbol->left, codificacion);
-
-  if (!caracterAgregado && arbol->peso) {
-    printf("1 ");
-    codificacion = realloc(codificacion, i+1);
-    codificacion[i] = '1';
-  }
-  i += btree_codificacion(arbol->right, codificacion);
-
-  return i;
+  return contador;
 }
+/*
+void mapeo_caracteres (BTree arbol, char* codeChars[256]){
+  char* strAux = malloc(1);
 
+  if (btree_empty(arbol)){ return; }
 
+  if (btree_empty(arbol->left)) {}
 
-
+}
+*/
 int btree_nnodos(BTree arbol){
   if (btree_empty(arbol))
     return 0;
@@ -131,7 +137,7 @@ BTree btree_copiar(BTree arbol){
   BTree nuevoArbol = malloc(sizeof(Nodo));
   nuevoArbol->caracter = arbol->caracter;
   nuevoArbol->left = arbol->left;
-  nuevoArbol->right = nuevoArbol->right;
+  nuevoArbol->right = arbol->right;
   nuevoArbol->peso = arbol->peso;
   return nuevoArbol;
 }
@@ -177,7 +183,7 @@ int btree_sumar_peso(BTree arbol){
   if (btree_empty(arbol))
     return 0;
 
-  return arbol->peso + btree_sumar_peso(arbol->left) + btree_sumar_peso(arbol->right);
+  return btree_sumar_peso(arbol->left) + btree_sumar_peso(arbol->right);
 }
 
 
