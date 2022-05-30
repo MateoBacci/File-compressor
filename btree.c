@@ -76,11 +76,11 @@ void btree_recorrer(BTree arbol,
 * btree_codificacion: BTree char* char* int -> int
 *
 * Recorre el arbol para ir guardando en codificacion la codificación del mismo,
-* y en caracteres, la codificación de cada caracter en un arreglo. Contador
-* sirve para mantener un control de en qué nodo va y así saber en qué índice de
-* codificación guardar cada bit.
+* y la codificación de cada caracter en un arreglo.
+* Contador sirve para mantener un control de en qué nodo va y así saber en qué
+* índice de codificación guardar cada bit.
 * Codificacion[0 - 510] -> codificacion del arbol
-* Codificacion[511 - 766] -> caracteres en el orden en que aparecen en el arbol
+* Codificacion[511 - 767] -> caracteres en el orden en que aparecen en el arbol
 */
 
 
