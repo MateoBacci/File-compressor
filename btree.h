@@ -1,6 +1,11 @@
 #ifndef __BTREE_H__
 #define __BTREE_H__
 
+#ifndef CANT_CHARS
+#define CANT_CHARS 256
+#endif
+
+
 typedef void (*FuncionVisitante)(char dato);
 
 typedef enum {
@@ -16,7 +21,7 @@ typedef struct _BTNodo {
   struct _BTNodo *right;
 } Nodo;
 
-typedef struct _BTNodo *BTree;
+typedef Nodo* BTree;
 
 /**
  * Devuelve un arbol vacío.
@@ -34,31 +39,23 @@ void btree_destruir(BTree nodo);
 int btree_empty(BTree nodo);
 
 /**
- * Crea un nuevo arbol, con el dato dado en el nodo raiz, y los subarboles dados
+ * Crea un nuevo arbol cuyo peso es la suma de los subarboles dados
  * a izquierda y derecha.
  */
 BTree btree_unir(BTree left, BTree right);
 
+
+int es_hoja(BTree arbol);
+
+
 /**
- * Recorrido del arbol, utilizando la funcion pasada.
+ * Recorre el arbol y guarda en un arreglo su codificación y los caracteres en 
+ * orden.
+ * codificacion[0 - 510] -> codificacion del arbol
+ * codificacion[511 - 767] -> caracteres en el orden en que aparecen en el arbol
  */
-void btree_recorrer(BTree arbol, BTreeOrdenDeRecorrido orden,
-                    FuncionVisitante visit);
+void btree_codificacion(BTree arbol, char* code, int* contTotal, int* contUnos);
 
-int btree_codificacion(BTree arbol, char* code, int i);
-
-
-int btree_nnodos(BTree arbol);
-
-int btree_buscar(BTree arbol, char carcater);
-
-BTree btree_copiar(BTree arbol);
-
-int btree_altura(BTree arbol);
-
-int btree_profundidad(BTree arbol, char dato);
-
-int btree_sumar_peso(BTree arbol);
-
+BTree btree_armar(BTree* duplas);
 
 #endif /* __BTREE_H__ */
