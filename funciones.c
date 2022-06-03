@@ -124,7 +124,7 @@ BTree arbol_desde_texto (char *code, int *pos, int *charsAgregados) {
   BTree arbol = malloc(sizeof(Nodo));
   *pos += 1;
   if (code[*pos - 1] == '1' && *pos < CANT_CHARS*2) {
-    arbol->caracter = code[*charsAgregados + (CANT_CHARS - 1)];
+    arbol->caracter = code[*charsAgregados + (CANT_CHARS*2 - 1)];
     arbol->left = arbol->right = NULL;
     *charsAgregados += 1;
   } else if (code[*pos - 1] == '0' && *pos < CANT_CHARS*2){
