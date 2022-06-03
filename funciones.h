@@ -25,13 +25,18 @@ void mostrar_duplas(BTree* duplas);
 */
 void ordena_duplas(BTree* duplas, int inicio);
 
-/**
-*  Librera el arreglo duplas
-*/
-void duplas_destruir(BTree* duplas);
-
 void char_codificacion (BTree arbol, char* strAux, char* arreglo[CANT_CHARS], int contador);
 
 char* codificar_texto(char* buf, int len, char* codes[CANT_CHARS], int* nLen);
+
+BTree arbol_desde_texto (char *code, int *pos, int *charsAgregados);
+
+char buscar_caracter(BTree arbol, char* buf, int *pos);
+
+char *decodificar_texto(BTree arbol, char *buf, int len, int *lenDecoded);
+
+char *cambio_archivo (char *fileName, char *dato);
+
+void destruir_arreglo(char *chars[CANT_CHARS]);
 
 #endif /*  __FUNCIONES_H_ */
