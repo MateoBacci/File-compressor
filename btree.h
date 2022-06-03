@@ -44,7 +44,8 @@ int btree_empty(BTree nodo);
  */
 BTree btree_unir(BTree left, BTree right);
 
-
+void btree_recorrer(BTree arbol, BTreeOrdenDeRecorrido orden,
+                    FuncionVisitante visit);
 int es_hoja(BTree arbol);
 
 
