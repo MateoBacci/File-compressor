@@ -5,15 +5,6 @@
 #define CANT_CHARS 256
 #endif
 
-
-typedef void (*FuncionVisitante)(char dato);
-
-typedef enum {
-  BTREE_RECORRIDO_IN,
-  BTREE_RECORRIDO_PRE,
-  BTREE_RECORRIDO_POST
-} BTreeOrdenDeRecorrido;
-
 typedef struct _BTNodo {
   int peso;
   char caracter;
@@ -38,25 +29,29 @@ void btree_destruir(BTree nodo);
  */
 int btree_empty(BTree nodo);
 
+
 /**
- * Crea un nuevo arbol cuyo peso es la suma de los subarboles dados
- * a izquierda y derecha.
+ * Retorna un arbol cuyos hijos son left y right y el peso la suma de ambos.
  */
 BTree btree_unir(BTree left, BTree right);
 
-void btree_recorrer(BTree arbol, BTreeOrdenDeRecorrido orden,
-                    FuncionVisitante visit);
+/**
+ * Indica si el arbol es una hoja.
+ */
 int es_hoja(BTree arbol);
 
 
 /**
- * Recorre el arbol y guarda en un arreglo su codificación y los caracteres en 
- * orden.
- * codificacion[0 - 510] -> codificacion del arbol
- * codificacion[511 - 767] -> caracteres en el orden en que aparecen en el arbol
+ * Recorre el arbol y guarda en un arreglo su codificación y los caracteres en
+ * el orden en que aparecen.
+ * codificacion[0 - 510] --> codificacion del arbol.
+ * codificacion[511 - 767] --> caracteres.
  */
 void btree_codificacion(BTree arbol, char* code, int* contTotal, int* contUnos);
 
+/**
+ * Arma un arbol cuyas hojas son los arboles del arreglo duplas. 
+ */
 BTree btree_armar(BTree* duplas);
 
 #endif /* __BTREE_H__ */

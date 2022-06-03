@@ -31,7 +31,7 @@ void mostrar_duplas(BTree* duplas){
   }
 }
 
-void ordena_duplas(BTree* duplas, int inicio){ /* Selección */
+void ordena_duplas(BTree* duplas, int inicio){ 
   int min, minPos;
   BTree aux;
   for (int i = inicio; i < CANT_CHARS; i++) {
@@ -55,17 +55,6 @@ char *str_copia(char *palabra, int len) {
   return palabraCopia;
 }
 
-
-
-/**
- * chars[i] = codificacion en el arbol del caracter en la posicion i de la 
- * tabla ascii
- *
- * - Ej: 
- *     Codificacion de 'A' en el arbol: 00011
- *     'A' en tabla ASCII: 65
- *     chars[65] = "00011"
-*/
 void char_codificacion (BTree arbol, char* strAux, char* arreglo[CANT_CHARS], int contador){
   if (btree_empty(arbol)){
     contador--; 
@@ -105,7 +94,6 @@ char* codificar_texto(char* buf, int len, char* codes[CANT_CHARS], int* nLen){
   return textoCodificado;
 }
 
-
 char buscar_caracter(BTree arbol, char *buf, int *pos) {
   if (es_hoja(arbol)){
     return arbol->caracter;
@@ -116,20 +104,18 @@ char buscar_caracter(BTree arbol, char *buf, int *pos) {
     return buscar_caracter(arbol->left, buf, pos);
   else 
     return buscar_caracter(arbol->right, buf, pos);
-  
-
 }
 
 char *decodificar_texto(BTree arbol, char *buf, int len, int *i) {
-  int largo = len; 
+  int largo = len, pos = 0;
   char *texto = malloc(largo);
   texto[0] = '\0';
-  for (int pos = 0; pos < len, *i <= pos; *i += 1) {
+  while ( pos < len) {
     if (*i > largo) {
       texto = realloc(texto, largo + len + 1);
     }
     texto[*i] = buscar_caracter(arbol, buf, &pos);
-    printf("%d/%d\t%ld\n", pos, largo, strlen(texto));
+    *i += 1;
   }
   return texto;
 }
@@ -137,18 +123,16 @@ char *decodificar_texto(BTree arbol, char *buf, int len, int *i) {
 BTree arbol_desde_texto (char *code, int *pos, int *charsAgregados) {
   BTree arbol = malloc(sizeof(Nodo));
   *pos += 1;
-  if (code[*pos - 1] == '1' && *pos < 512) {
-    arbol->caracter = code[*charsAgregados + 511];
+  if (code[*pos - 1] == '1' && *pos < CANT_CHARS*2) {
+    arbol->caracter = code[*charsAgregados + (CANT_CHARS - 1)];
     arbol->left = arbol->right = NULL;
     *charsAgregados += 1;
-  } else if (code[*pos - 1] == '0' && *pos < 512){
+  } else if (code[*pos - 1] == '0' && *pos < CANT_CHARS*2){
     arbol->left = arbol_desde_texto(code, pos, charsAgregados);
     arbol->right = arbol_desde_texto(code, pos, charsAgregados);
   }
   return arbol;
 }
-
-
 
 char *cambio_archivo (char *fileName, char *dato) {
   int len = strlen(fileName) + strlen(dato);
@@ -161,7 +145,6 @@ char *cambio_archivo (char *fileName, char *dato) {
   }
   return newFileName;
 }
-
 
 void destruir_arreglo(char *chars[CANT_CHARS]){
   for (int i = 0; i < CANT_CHARS; i++)
